@@ -10,7 +10,7 @@ storage = {
    name="devbkstg1"
   resource_group_name= "devrg1"
   location="eastus"
-  access_tier="Standard"
+  account_tier="Standard"
   account_replication_type="LRS"
 }}
 
