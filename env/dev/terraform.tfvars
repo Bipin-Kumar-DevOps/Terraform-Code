@@ -7,7 +7,7 @@ rgs = {
 
 storage = {
     storage1={
-   name="devbkstg247"
+   storage_account_name="devbkstg247"
   resource_group_name= "devrg1"
   location="eastus"
   account_tier="Standard"
