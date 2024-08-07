@@ -20,7 +20,7 @@ container = {
   container1={
   container_name = "devbkcontainer1"
   storage_account_name = "devbkstg247"
-  container_access_type = "Public"
+  container_access_type = "private"
 
   }
 }
