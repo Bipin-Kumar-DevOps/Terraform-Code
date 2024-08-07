@@ -1,0 +1,96 @@
+trigger: 
+ branches:
+   include:
+     - master
+
+pool: default
+
+parameters:
+  - name: enviromment
+    displayName: Environment for dev & test
+    type: string
+    default: dev
+    values:
+      - dev
+      - test
+
+variables:
+  work_dir: $(System.DefaultWorkingDirectory)/env/${{parameters.enviromment}}
+  service_connection: 'bk-service-connection'
+  rg_group: 'prashantrg'
+  storage_account: 'pksa452'
+  container: 'pk9452'
+  key: 'bipin-dev.tfstate'
+
+
+stages:
+  - stage: tfsec
+    displayName: TF Sec
+    jobs:
+      - job: tfsec
+        steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+        - task: tfsec@1
+          displayName: tfsec
+          inputs:
+            version: 'v1.26.0'
+  - stage: terrafominitplan
+    dependsOn: tfsec
+    displayName: Terraform Init & Plan
+    jobs:
+      - job: terraforminit
+        displayName: Terraform Init
+        steps:
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: $(work_dir)
+            backendServiceArm: $(service_connection)
+            backendAzureRmResourceGroupName: $(rg_group)
+            backendAzureRmStorageAccountName: $(storage_account)
+            backendAzureRmContainerName: $(container)
+            backendAzureRmKey: $(key)
+        - task: TerraformTaskV4@4
+          displayName: Terraform Plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: $(work_dir)
+            environmentServiceNameAzureRM: $(service_connection)
+  - stage: manualvalidation
+    dependsOn: terrafominitplan
+    displayName: Manual Validation
+    pool: server
+    jobs:
+      - job: manualvalidation
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'kumar@bipinn'
+  - stage: terraformapply
+    displayName: Terraform Apply
+    dependsOn: manualvalidation
+    jobs:
+      - job: terraformapply
+        displayName: Terraform Apply
+        steps:
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: $(work_dir)
+            backendServiceArm: $(service_connection)
+            backendAzureRmResourceGroupName: $(rg_group)
+            backendAzureRmStorageAccountName: $(storage_account)
+            backendAzureRmContainerName: $(container)
+            backendAzureRmKey: $(key)
+        
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: $(work_dir)
+            environmentServiceNameAzureRM: $(service_connection)
