@@ -20,7 +20,7 @@ variables:
   rg_group: 'prashantrg'
   storage_account: 'pksa452'
   container: 'pk9452'
-  key: 'bipin-dev.tfstate'
+  key: 'bipin-test.tfstate'
 
 
 stages:
