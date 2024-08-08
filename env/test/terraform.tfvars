@@ -1,6 +1,6 @@
 rgs = {
   rg1={
-    name="testrg1"
+    name="testbkrg1"
     location="eastus"
   }
 }
@@ -8,7 +8,7 @@ rgs = {
 storage = {
     storage1={
    storage_account_name="testbkstg247"
-  resource_group_name= "testrg1"
+  resource_group_name= "testbkrg1"
   location="eastus"
   account_tier="Standard"
   account_replication_type="LRS"
