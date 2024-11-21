@@ -17,10 +17,10 @@ parameters:
 variables:
   work_dir: $(System.DefaultWorkingDirectory)/env/${{parameters.enviromment}}
   service_connection: 'bk-service-connection'
-  rg_group: 'prashantrg'
-  storage_account: 'pksa452'
-  container: 'pk9452'
-  key: 'bipin-test.tfstate'
+  rg_group: '####'
+  storage_account: '#####'
+  container: '####'
+  key: 'b######t.tfstate'
 
 
 stages:
